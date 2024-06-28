@@ -70,6 +70,7 @@ def output_file_name(datum, use_hammer: bool, use_llm: bool):
     folder.mkdir(exist_ok=True, parents=True)
     return folder / f"{name}.json"
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
                     prog='MiniF2F Search',

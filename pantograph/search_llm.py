@@ -16,6 +16,8 @@ class LLMAgent(Agent):
 
         if use_llm:
             sgl.set_default_backend(sgl.OpenAI("gpt-4"))
+            # 4o is too chatty
+            #sgl.set_default_backend(sgl.OpenAI("gpt-4o"))
 
         self.goal_tactic_id_map = collections.defaultdict(lambda : 0)
 

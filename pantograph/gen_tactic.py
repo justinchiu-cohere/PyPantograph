@@ -89,7 +89,6 @@ def multi_turn_question(s, question_1, question_2):
 
 @sgl.function
 def select_tactic(s, server, state, goal_id,informal_stmt="",  informal_proof="", feedback_turns = 5):
-    
     s += sgl.system("You are an expert in Lean. Choose the next ONE tactic to run given the current proof state and goals.")
     s += sgl.user(LEAN4_REWRITE)
     s += sgl.user("The current proof state: GoalState(state_id=0, goals=[Goal(variables=[], target='∀ (a b: Nat), (b = 2) -> 1 + a + 1 = a + b', name=None, is_conversion=False)])")
@@ -103,13 +102,15 @@ def select_tactic(s, server, state, goal_id,informal_stmt="",  informal_proof=""
     for i in range(feedback_turns):
         with s.copy() as tmp:
             tmp += sgl.assistant(sgl.gen("tactic", max_tokens=64))
-            # print("==tmp===")
-            # print(tmp["tactic"])
+            print("==tmp===")
+            print(tmp["tactic"])
             tactic = extract_code_from_llm_output(tmp["tactic"])
         s += sgl.assistant("```"+tactic+"```")
         success, new_state = apply_tactic(server, state, goal_id, tactic)
-        # print("===execute===")
-        # print(success, new_state )
+        print("===execute===")
+        print("success:",success)
+        print("new_state:", new_state)
+        #import pdb; pdb.set_trace()
         if not success:
             with s.user():
                 s += "This answer got Lean compile error:\n" + str(new_state) + "\n"
